@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 添加视口设置以优化移动端显示 -->  
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}"> <!-- rel="stylesheet" 属性指定了被链接的文件是一个样式表;url_for是一个url链接的函数，static是同app.py的一级目录，后面跟链接的文件路径 -->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <title>ARP攻防系统</title>
+    <script>  
+        $(document).ready(function() {  
+            // 隐藏所有内容部分  
+            $('.content').hide();  
+            // 显示默认的内容部分  
+            $('#content-knowledge').show();  
+  
+            // 为导航标签添加点击事件  
+            $('.nav-link').click(function(e) {  
+                e.preventDefault(); // 阻止默认的链接跳转行为  
+                var target = $(this).data('target'); // 获取目标内容部分的ID  
+                $('.content').hide(); // 隐藏所有内容部分  
+                $('#' + target).show(); // 显示目标内容部分  
+            });  
+        });  
+    </script> 
+    <script>  
+        async function ARPAttack() {  
+            try {  
+                // 获取输入的IP地址  
+                const ipAddress = document.getElementById('ip-address').value;  
+      
+                // 使用fetch发送POST请求  
+                const response = await fetch('/arp_attack', {  
+                    method: 'POST', // 指定请求方法为POST  
+                    headers: {  
+                        'Content-Type': 'application/x-www-form-urlencoded' // 设置请求头  
+                    },  
+                    body: 'ip=' + encodeURIComponent(ipAddress) // 设置请求体  
+                });  
+      
+                // 检查响应状态  
+                if (!response.ok) {  
+                    throw new Error('请求失败，HTTP错误状态码：' + response.status);  
+                }  
+      
+                // 解析响应内容（假设服务器返回的是文本）  
+                const result = await response.text();  
+      
+                // 请求成功，更新页面内容  
+                document.getElementById('arp-attack-result').innerHTML = result;  
+            } catch (error) {  
+                // 请求失败或网络错误  
+                document.getElementById('arp-attack-result').innerHTML = '请求失败，请检查网络或服务器状态。';  
+                console.error('ARPAttack函数执行出错：', error);  
+            }  
+        }  
+    </script>
+    <script>  
+            async function RealARPAttack() {  
+                try {  
+                    // 获取输入的被攻击的IP地址和网关地址  
+                    const attack_ipAddress = document.getElementById('attack_ip').value;  
+                    const gateway_ipAddress = document.getElementById('gateway_ip').value;
+                    const Wangka = document.getElementById('wangka').value;
+                    const body = 'aip=' + encodeURIComponent(attack_ipAddress) + '&gip=' + encodeURIComponent(gateway_ipAddress) + '&wangka=' + encodeURIComponent(Wangka);
+                    // 使用fetch发送POST请求  
+                    const response = await fetch('/attack_arpspoof', {  
+                        method: 'POST', // 指定请求方法为POST  
+                        headers: {  
+                            'Content-Type': 'application/x-www-form-urlencoded' // 设置请求头  
+                        },  
+                        body: body // 设置请求体  
+                    });  
+                    // 检查响应状态  
+                    if (!response.ok) {  
+                        throw new Error('请求失败，HTTP错误状态码：' + response.status);  
+                    }  
+                    // 获取响应内容的ReadableStream对象  
+                    const bodyStream = response.body;
+                } catch (error) {  
+                    // 请求失败或网络错误  
+                    document.getElementById('arp-attack-Realresult').innerHTML = '请求失败，请检查网络或服务器状态。';  
+                    console.error('attack_arpspoof函数执行出错：', error);  
+                }  
+            }  
+    </script>
+    
+</head>
+
+<body style="line-height:30px;font-size:15px"><!-- line-height为行高，font-size为字体大小 -->
+    <nav class="navbar navbar-expand-md navbar-light bg-light">  
+        <div class="container">  
+            <div class="collapse navbar-collapse" id="navbarNav">  
+                <ul class="navbar-nav">  
+                    <li class="nav-item">  
+                        <a class="nav-link" href="#" data-target="content-knowledge">知识库</a>  
+                    </li>  
+                    <li class="nav-item">  
+                        <a class="nav-link" href="#" data-target="content-arp-detect">ARP检测</a>  
+                    </li>  
+                    <li class="nav-item">  
+                        <a class="nav-link" href="#" data-target="content-arp-attack">ARP攻击</a>  
+                    </li>  
+                    <li class="nav-item">  
+                        <a class="nav-link" href="#" data-target="content-contact">统计分析</a>  
+                    </li>  
+                </ul>  
+            </div>  
+        </div>  
+    </nav>
+    <div class="container">  
+        <div class="row">  
+            <div class="col-md-12">  
+                <div id="content-knowledge" class="content">  
+                    <h2>ARP漏洞的危害！</h2>  
+                    <p>ARP漏洞的危害极大，它可能导致局域网内的计算机无法正常通信，造成网络延迟甚至中断。攻击者可以利用此漏洞窃取敏感信息，掌控目标设备，进而发起更多攻击，如DDoS攻击或挖矿恶意软件，导致系统崩溃或财产损失。此外，受攻击设备还可能成为传播恶意软件或钓鱼活动的平台，给其他用户带来安全隐患。</p>  
+                    <h2>ARP漏洞的检测!</h2>
+                    <p>ARP漏洞的检测主要依赖于命令行工具和网络监控软件。通过输入“arp -a”命令查看ARP缓存表，检查网关MAC地址是否异常或IP地址与MAC地址映射错误。同时，使用ARP防火墙实时监测网络数据包，及时发现并拦截异常ARP请求。此外，定期检查网络设备和交换机状态，确保网络运行正常。</p>
+                    <h2>ARP漏洞的防护!</h2>
+                    <p>ARP漏洞的防护可从多方面着手：首先，实施静态ARP绑定，确保IP与MAC地址固定对应；其次，启用ARP防火墙，监控并拦截异常ARP请求；最后，利用交换机DAI技术，在源头阻断ARP攻击。综合采取这些措施，可有效降低ARP漏洞带来的安全风险。</p>
+                    <h2>更多......</h2>
+                </div>  
+                <div id="content-arp-detect" class="content">  
+                    <h2>ARP检测模块</h2>  
+                    <form>
+                        <div>
+                            <label for="arp-detection">点击按钮，检测主机是否存在Arp攻击</label><br>
+                            <label for="arp-detection">点击按钮之后，请到日志中心-ARP检测执行记录查看结果</label><br>
+                            <button id="arp-detection" type="button" class="btn btn-primary" style="font-size:  15px;" onclick="pull_arp_detection_result()">Arp攻击检测</button>
+                        </div>
+                    </form> 
+                    <div id="arp-detection_result" class="form-group"></div>
+                    <div>
+                        <h4>下载Arp检测脚本</h4>
+                        <ul>
+                            <li><a href="/static/arp_detection_linux.py" download class="download-link">Linux版</a></li>
+                            <li><a href="/static/arp_detection_win.py" download class="download-link">Windows版</a></li>
+                        </ul>
+                    </div>
+                </div>  
+                <div id="content-arp-attack" class="content">  
+                    <h2>ARP攻击模块</h2>  
+                    <form>  
+                        <div class="form-group">  
+                            <label for="ip-address">请输入要检测的IP段地址：</label>  
+                            <input type="text" class="form-control" id="ip-address" placeholder="输入IP地址">  
+                        </div>  
+                        <button type="button" class="btn btn-primary" onclick="ARPAttack()",style="font-size 15px">局域网存活主机探测</button>
+                        <div id="arp-attack-result" class="form-group"></div>                 
+                        <div class="form-group">  
+                            <label for="wangka">请输入被攻击机器的网卡名字：</label>  
+                            <input type="text" class="form-control" id="wangka" placeholder="网卡名字如：eth0等">
+                            <label for="attack_ip">请输入要Attack的IP地址：</label>  
+                            <input type="text" class="form-control" id="attack_ip" placeholder="输入被Attack的IP地址">
+                            <label for="gateway_ip">请输入要Attack的网关地址：</label> 
+                            <input type="text" class="form-control" id="gateway_ip" placeholder="输入网关地址"> 
+                        </div>
+                        <div>
+                            <label for="button">首次部署且未执行攻击之前会显示无nohup.out文件是正常的，执行一次就ok了！</label> 
+                            <button type="button" class="btn btn-primary" onclick="RealARPAttack()",style="font-size 15px">Attack</button>
+                            <div id="arpspoof_log" class="form-group"></div>
+                        </div>
+                        <div>
+                            <label for="stop-btn">点击停止后arpspoof命令将停止，界面保留最后十条记录！</label> 
+                            <button id="stop-btn">停止</button>
+                        </div>  
+                    </form> 
+                </div>  
+                <div id="content-contact" class="content">  
+                    <h3>ARP攻击执行日志</h3>  
+                    <div id="arp-attack-log" class="form-group"></div>
+                    <h3>ARP检测执行记录</h3> 
+                    <div id="arp-detection-log" class="form-group"></div>
+                    <h3>ARP攻击实时日志</h3> 
+                    <div id="arpspoof_log1" class="form-group"></div>
+                    <!-- <p>微信公众号：安全info </p>   -->
+
+                </div>  
+            </div>  
+        </div>  
+    </div>  
+</body>
+
+</html>
+<script>
+    const arpspoofLog = document.getElementById("arpspoof_log");
+    function updateArpspoofLog() {
+    fetch("/nohup.out")
+        .then(response => response.text())
+        .then(data => {
+        const lines = data.trim().split("\n");
+        const latestLines = lines.slice(-10).join("<br>");
+        arpspoofLog.innerHTML = latestLines;
+        })
+        .catch(error => console.error(error));
+    }
+    setInterval(updateArpspoofLog, 3000);
+</script>
+<script>
+    const arpspoofLog1 = document.getElementById("arpspoof_log1");
+
+    function updateArpspoofLog1() {
+    fetch("/nohup.out")
+        .then(response => response.text())
+        .then(data => {
+        const lines = data.trim().split("\n");
+        const latestLines = lines.slice(-10).join("<br>");
+        arpspoofLog1.innerHTML = latestLines;
+        })
+        .catch(error => console.error(error));
+    }
+    setInterval(updateArpspoofLog1, 3000);
+</script>
+<script>
+    const stopBtn = document.getElementById('stop-btn');
+    stopBtn.addEventListener('click', (event) => {
+    event.preventDefault(); // 阻止表单默认提交行为
+    fetch('/stop-command', {
+        method: 'POST'
+    })
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+    });
+</script>
+<script>
+    const arp_detection_result = document.getElementById("arp-detection_result")
+    function pull_arp_detection_result() {
+    fetch("/arp_detection")
+    .then(response => response.text())
+    .then(data => {
+        arp_detection_result.innerHTML = data;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    }
+</script>
+<script>
+    const arpattackLog = document.getElementById("arp-attack-log");
+    function updateattacklog() {  
+    fetch("/audit-attack-log")  
+        .then(response => response.text())  
+        .then(data => {  
+            // 使用正则表达式替换所有的\uXXXX为对应的Unicode字符  
+            const decodedData = data.replace(/\\u([\dA-Fa-f]{4})/g, (_, match) =>   
+                String.fromCharCode(parseInt(match, 16))  
+            );  
+              
+            const lines = decodedData.trim().split("\n");  
+            const latestLines = lines.slice(-10).join("<br>");  
+            arpattackLog.innerHTML = latestLines;  
+        })  
+        .catch(error => console.error(error));  
+    }  
+    setInterval(updateattacklog, 3000);
+</script>
+<script>
+    const arpdetectionlog = document.getElementById("arp-detection-log");
+    function updatedetectionlog() {  
+    fetch("/arp_detection_log")  
+        .then(response => response.text())  
+        .then(data => {  
+            // 使用正则表达式替换所有的\uXXXX为对应的Unicode字符  
+            const decodedData = data.replace(/\\u([\dA-Fa-f]{4})/g, (_, match) =>   
+                String.fromCharCode(parseInt(match, 16))  
+            );  
+              
+            const lines = decodedData.trim().split("\n");  
+            const latestLines = lines.slice(-10).join("<br>");  
+            arpdetectionlog.innerHTML = latestLines;  
+        })  
+        .catch(error => console.error(error));  
+    }  
+    setInterval(updatedetectionlog, 3000);
+</script>

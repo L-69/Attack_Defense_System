@@ -1,0 +1,75 @@
+/* 全局样式 */  
+body {  
+    font-family: Arial, sans-serif;  
+    background-color: #d8cc4b;  
+    color: #333;  
+    line-height: 1.6;  
+}  
+  
+h2 {  
+    color: #1b24c2;  
+    font-weight: bold;  
+    margin-bottom: 15px;  
+}  
+  
+p {  
+    margin-bottom: 20px;  
+}  
+  
+/* 导航栏样式 */  
+.navbar {  
+    background-color: #333; /* 更改背景色 */  
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影 */  
+}  
+  
+.navbar-nav .nav-link {  
+    background-color: rgb(242, 244, 240);
+    color: #070707; /* 更改链接颜色 */  
+    transition: color 0.3s ease; /* 添加过渡效果 */  
+}  
+    
+.navbar-nav .nav-link:hover {  
+    color: rgb(28, 7, 212); /* 更改悬停颜色 */  
+}  
+  
+/* 内容区域样式 */  
+.content {  
+    background-color: #f3ebd8; /* 更改背景色 */  
+    padding: 20px; /* 添加内填充 */  
+    margin-top: 20px; /* 添加上边距 */  
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影 */  
+}  
+  
+/* 响应式设计 */  
+@media (max-width: 767px) {  
+    .navbar-nav .nav-item {  
+        text-align: center; /* 在小屏幕上居中显示导航链接 */  
+    }  
+}
+#arp-attack-result {
+  max-height: 200px; /* 设置最大高度为200像素 */
+  overflow: auto; /* 添加滚动条 */
+}
+#arpspoof-log {
+    max-height: 200px; /* 设置最大高度为200像素 */
+    overflow: auto; /* 添加滚动条 */
+}
+
+#arp-detection_result {
+    max-height: 200px; /* 设置最大高度为200像素 */
+    overflow: auto; /* 添加滚动条 */
+}
+.download-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.download-link:hover {
+    background-color: #0062cc;
+    color: #fff;
+}
